@@ -65,6 +65,15 @@ jobs:
         if: github.event_name != 'pull_request'
         run: cosign login ${{ env.REGISTRY }} -u ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Set package visibility to public
+        if: github.event_name != 'pull_request'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api --method PATCH "/user/packages/container/${{ github.event.repository.name }}/visibility" \
+            -f visibility=public \
+            --silent
+
       - name: Sign the published Docker image
         if: ${{ github.event_name != 'pull_request' }}
         env:
