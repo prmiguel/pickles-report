@@ -9,6 +9,7 @@
 ## Requirements
 
 - Docker installed
+- Image available for `linux/amd64`
 
 ## Usage
 
