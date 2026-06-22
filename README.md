@@ -9,7 +9,7 @@
 ## Requirements
 
 - Docker installed
-- Multi-architecture image available for `linux/amd64` and `linux/arm64`
+- Image available for `linux/amd64`
 
 ## Usage
 
