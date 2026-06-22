@@ -3,7 +3,7 @@ WORKDIR /tool
 ADD https://github.com/picklesdoc/pickles/releases/download/v4.0.3/Pickles-exe-linux-x64-4.0.3.zip Pickles.zip
 RUN unzip Pickles.zip && chmod +x Pickles
 
-FROM mcr.microsoft.com/powershell:lts-7.2-ubuntu-jammy AS runtime
+FROM mcr.microsoft.com/dotnet/runtime:6.0-jammy AS runtime
 
 LABEL org.opencontainers.image.title="Pickles In Docker"
 LABEL org.opencontainers.image.description="Docker image for Pickles — living documentation generator from Gherkin feature files"
