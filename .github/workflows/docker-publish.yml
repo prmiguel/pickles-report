@@ -50,13 +50,15 @@ jobs:
         with:
           context: .
           platforms: linux/amd64
+          load: true
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Test image
         run: |
-          docker run --rm ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.version || 'latest' }} --help
+          tag="${{ steps.meta.outputs.version || 'latest' }}"
+          docker run --rm "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:$tag" --help
 
       - name: Sign the published Docker image
         if: ${{ github.event_name != 'pull_request' }}
