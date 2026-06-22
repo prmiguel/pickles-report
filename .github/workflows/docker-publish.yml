@@ -50,18 +50,24 @@ jobs:
         with:
           context: .
           platforms: linux/amd64
-          load: true
+          load: ${{ github.event_name == 'pull_request' }}
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Test image
+        if: github.event_name == 'pull_request'
         run: |
           tag="${{ steps.meta.outputs.version || 'latest' }}"
           docker run --rm "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:$tag" --help
+
+      - name: Cosign login
+        if: github.event_name != 'pull_request'
+        run: cosign login ${{ env.REGISTRY }} -u ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }}
 
       - name: Sign the published Docker image
         if: ${{ github.event_name != 'pull_request' }}
         env:
           COSIGN_EXPERIMENTAL: "true"
-        run: cosign sign ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@${{ steps.build-and-push.outputs.digest }}
+        run: |
+          cosign sign ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@${{ steps.build-and-push.outputs.digest }}
