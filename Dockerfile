@@ -1,4 +1,4 @@
-FROM alpine as stage
+FROM alpine AS stage
 WORKDIR /tool
 ADD https://github.com/picklesdoc/pickles/releases/download/v4.0.3/Pickles-exe-linux-x64-4.0.3.zip Pickles.zip
 RUN unzip Pickles.zip
